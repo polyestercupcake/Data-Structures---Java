@@ -1,0 +1,39 @@
+public String toString() {
+
+		String output = "";
+		int depth = 0;
+		int arraySpots = getSize();
+
+		while (arraySpots > 0) {
+			arraySpots /= 2;
+			++depth;
+		}
+
+		int maxWidth = (int) (Math.pow(2, depth));
+		int charWidth = 4 * maxWidth;
+		int idx = 0;
+
+		for (int i = 0; i < depth; ++i) {
+			int level = (int) Math.pow(2, i);
+			for (int j = 0; j < level; ++j) {
+				int preSpace = (int) ((charWidth / (Math.pow(2, (i + 1))) - 1));
+
+				for (int k = 0; k < preSpace; ++k) {
+					output += " ";
+				}
+				output += root.getValue(); // probably wrong
+				++idx;
+
+				if (idx >= getSize()) {
+					output += "\n";
+					break;
+				}
+
+				for (int k = 0; k < preSpace; ++k) {
+					output += " ";
+				}
+			}
+			output += "\n\n";
+		}
+		return output;
+	}
