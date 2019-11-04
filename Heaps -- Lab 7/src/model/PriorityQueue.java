@@ -15,12 +15,6 @@ public class PriorityQueue<T extends Comparable<T>> {
 	}
 
 	public void enqueue(Data<T> value) {
-		if (value == null 
-				|| value.getValue() == null
-				|| value.getPriority() > 10 
-				|| value.getPriority() < 1)
-			return;
-		else
 			values.insert(value);
 	}
 
