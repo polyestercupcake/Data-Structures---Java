@@ -1,0 +1,26 @@
+IEdge tempEdge = null;
+		if (!getAdjacentVertices(start).isEmpty()) {
+			for (IEdge edge : edges) {
+				if (edge.getVertex1() == start) {
+					if (currentPath.contains(end))
+						break;
+					if (!currentPath.contains(edge.getVertex2())) {
+						if (getAdjacentVertices(edge.getVertex1()).size() <= 1) {
+							currentPath.add(edge.getVertex2());
+							getAllPaths(edge.getVertex2(), end, currentPath, returnValues);
+						}
+						if (tempEdge != null) {
+							//what if more than 1 tempEdge and its not right one?
+							//while loop?
+							if (tempEdge.getWeight() > edge.getWeight()) {
+								currentPath.add(edge.getVertex2());
+								getAllPaths(edge.getVertex2(), end, currentPath, returnValues);
+							}
+						} else {
+							tempEdge = edge;
+						}
+					}
+				}
+			}
+		}
+		return currentPath;

@@ -1,0 +1,41 @@
+Source: https://algs4.cs.princeton.edu/41graph/
+Maze: https://algs4.cs.princeton.edu/41graph/Maze.java.html
+
+Exam 2--Content
+what ADT has to do with BFS = queue
+what ADT has to do with DFS = stack
+
+behavior
+terms
+given a data structure, tell me the ADT
+terms of graph theory
+
+given a minimum-spanning tree, how can I connect all nodes with minimum amount of solder
+	get the smallest sum of each added edge
+
+understand basic definition of a graph
+
+simple graph: no loops
+
+graph has 3 v and 3 e
+	does it have a minimum-spanning tree?
+	false (if it's not connected)
+
+Euler Path: goes to every edge once, doesn't have to end at same vertex you started at
+
+
+GRAPHS3---Weights and Directions (Roads)
+StronglyConnected = choose any 2 vertices, there is a path between them
+WeaklyConnected = cannot traverse up and down an edge. Only one way...but if you can get to each edge, it's weakly connected
+
+Add an (integer) length property to your edges.  Higher is more painful.  Lengths are additive.
+
+Add getShortestPath(Vertex v1, Vertex v2) method that respects lengths and make any corrections from previous feedback.
+
+Make your edges have a property of direction.  Edges will now be traversable one way.  If the edge is from vertex A to B, then travel is possible from A to B.  Under this system, bi-directional travel would require two edges.
+
+Bonus: 5 points each
+
+hasStrongEulerCycle(), and strongEulerCycle() if they can respect direction
+
+hamiltonians are also 5 bonus if they can find the shortest hamiltonian
