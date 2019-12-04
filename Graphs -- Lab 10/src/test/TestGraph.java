@@ -250,8 +250,8 @@ class TestGraph {
 		megaGraph.addEdge(new Edge(a, k, 5));
 		megaGraph.addEdge(new Edge(b, g, 4));
 		megaGraph.addEdge(new Edge(b, f, 2));
-		megaGraph.addEdge(new Edge(c, h, 0));
-		megaGraph.addEdge(new Edge(c, i, 0));
+		megaGraph.addEdge(new Edge(c, h, 1));
+		megaGraph.addEdge(new Edge(c, i, 1));
 		megaGraph.addEdge(new Edge(c, j, 3));
 		megaGraph.addEdge(new Edge(c, k, 6));
 		megaGraph.addEdge(new Edge(d, l, 7));
@@ -264,7 +264,7 @@ class TestGraph {
 		megaGraph.addEdge(new Edge(f, x, 9));
 		megaGraph.addEdge(new Edge(f, r, 5));
 		megaGraph.addEdge(new Edge(r, u, 2));
-		megaGraph.addEdge(new Edge(n, o, 0));
+		megaGraph.addEdge(new Edge(n, o, 1));
 		megaGraph.addEdge(new Edge(l, k, 7));
 		megaGraph.addEdge(new Edge(l, q, 2));
 		megaGraph.addEdge(new Edge(l, y, 1));
@@ -306,9 +306,9 @@ class TestGraph {
 		midGraph.addVertex(e);
 		midGraph.addEdge(new Edge(a, b, 1));
 		midGraph.addEdge(new Edge(b, c, 1));
-		midGraph.addEdge(new Edge(c, d, 0));
+		midGraph.addEdge(new Edge(c, d, 1));
 		midGraph.addEdge(new Edge(d, e, 1));
-		midGraph.addEdge(new Edge(a, e, 4));
+		midGraph.addEdge(new Edge(a, e, 5));
 		
 		assertTrue(midGraph.getShortestPath(a, e).equals(Arrays.asList(a, b, c, d, e)));
 	}

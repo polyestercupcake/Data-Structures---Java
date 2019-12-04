@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,6 @@ public class Graph implements DiGraphable {
 
 	private List<IVertex> vertices = new ArrayList<>();
 	private List<IEdge> edges = new ArrayList<>();
-	private int pathWeight;
 
 	@Override
 	public void addEdge(IEdge pEdge) {
@@ -60,6 +60,7 @@ public class Graph implements DiGraphable {
 
 	/**
 	 * Utility method to get all adjacent edges of a given vertex.
+	 * 
 	 * @param pVertex
 	 * @return
 	 */
@@ -76,10 +77,11 @@ public class Graph implements DiGraphable {
 		}
 		return adjacentEdges;
 	}
-	
+
 	/**
-	 * Utility method to get all adjacent vertices from a given vertex without respecting
-	 * direction.
+	 * Utility method to get all adjacent vertices from a given vertex without
+	 * respecting direction.
+	 * 
 	 * @param pVertex
 	 * @return
 	 */
@@ -120,64 +122,48 @@ public class Graph implements DiGraphable {
 		return true;
 	}
 
-	public List<IVertex> getAllPaths(IVertex start, IVertex end, List<IVertex> currentPath, int currentPathWeight,
-			PriorityQueue<List<IVertex>> returnValues) {
-
-		if (getAdjacentEdges(start).isEmpty()) {
-			return currentPath;
-		} else {
-			for (IEdge edge : getAdjacentEdges(start)) {
-				if (currentPath.contains(end))
-					break;
-				if (!currentPath.contains(edge.getVertex2())) {
-					currentPath.add(edge.getVertex2());
-					pathWeight = currentPathWeight + edge.getWeight();
-					return getAllPaths(edge.getVertex2(), end, currentPath, pathWeight, returnValues);
+	public void getAllPaths(IVertex end, Path currentPath, PriorityQueue<Path> possiblePaths) {
+		// recursion
+		// terminating case
+		if (end.equals(currentPath.getLastVertex())) {
+			possiblePaths.add(currentPath);
+		} else { // recursive case
+			for (IEdge edge : getAdjacentEdges(currentPath.getLastVertex())) { // this will kill the path if no where to go
+				if (!currentPath.getVertices().contains(edge.getVertex2())) {
+					// passing by object reference and by value reference...study
+					// don't mess with currentPath because that would mess it up for everyone else
+					// make a copy and mess with it.
+					Path newPath = new Path(currentPath);
+					newPath.getVertices().add(edge.getVertex2());
+					newPath.setWeight(newPath.getWeight() + edge.getWeight());
+					getAllPaths(end, newPath, possiblePaths);
 				}
 			}
 		}
-		return currentPath;
+
 	}
 
 	@Override
 	public List<IVertex> getShortestPath(IVertex start, IVertex end) {
 
-//		PriorityQueue<Path> bestPossiblePath = new PriorityQueue<>();
-		PriorityQueue<List<IVertex>> bestPossiblePath = new PriorityQueue<>((new ShortestPathComparator()));
-		int pathWeight;
-		List<IVertex> currentPath = new ArrayList<>();
-		//Path currentPath = new Path(vertices, pathWeight);
-		Integer oldPathWeight = Integer.MAX_VALUE;
+		PriorityQueue<Path> possiblePaths = new PriorityQueue<>();
 
 		if (start == end) {
-			currentPath.add(start);
-			return currentPath;
+			return Arrays.asList(start);
 		}
 
 		for (IEdge edge : getAdjacentEdges(start)) {
-			//currentPath = new Path(vertices, pathWeight);
-			currentPath = new ArrayList<>();
-			pathWeight = 0;
-			currentPath.add(start);
-			currentPath.add(edge.getVertex2());
-			pathWeight += edge.getWeight();
-			getAllPaths(edge.getVertex2(), end, currentPath, pathWeight, bestPossiblePath);
-			if (currentPath.get(currentPath.size() - 1) == end) {
-				if (oldPathWeight >= pathWeight) {
-					if (bestPossiblePath.size() > 0)
-						bestPossiblePath.poll();
-					bestPossiblePath.add(currentPath);
-					oldPathWeight = pathWeight;
-				}
-			}
+			Path currentPath = new Path(Arrays.asList(start, edge.getVertex2()), edge.getWeight());
+			getAllPaths(end, currentPath, possiblePaths);
 		}
-
-		if (bestPossiblePath.size() == 0) {
-			return new ArrayList<>();
-		} else {
-			//return bestPossiblePath.poll().getCurrentPath();
-			return bestPossiblePath.poll();
-		}
+//		System.out.println("All paths");
+//		possiblePaths.forEach(x -> System.out.println(x.getVertices() + ": " + x.getWeight()));
+//		System.out.println("---------------");		
+		return possiblePaths
+				.stream()
+				.findFirst()
+				.orElse(new Path())
+				.getVertices();
 	}
 
 	@Override
@@ -191,7 +177,7 @@ public class Graph implements DiGraphable {
 		Queue<IVertex> queue = new LinkedList<>();
 		Set<IVertex> copyOfVertices = new HashSet<>();
 		queue.add(vertices.get(0));
-		copyOfVertices.add(vertices.get(0));
+		//copyOfVertices.add(vertices.get(0));
 
 		while (queue.size() > 0) {
 			IVertex temp = queue.poll();
@@ -210,18 +196,18 @@ public class Graph implements DiGraphable {
 
 	@Override
 	public boolean isStronglyConnected() {
-		
+
 		List<IVertex> returnValues = new ArrayList<>();
-		
+
 		if (vertices.size() == 1 || vertices.size() == 0)
 			return true;
 		if (isWeaklyConnected() == false)
 			return false;
-		
+
 		for (IVertex vertex : vertices) {
 			returnValues.clear();
 			returnValues = breadthFirstSearch(vertex);
-			if (returnValues.size() != vertices.size()) 
+			if (returnValues.size() != vertices.size())
 				return false;
 		}
 		return true;
