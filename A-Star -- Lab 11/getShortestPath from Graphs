@@ -1,0 +1,43 @@
+	public void getAllPaths(IVertex end, Path currentPath, PriorityQueue<Path> possiblePaths) {
+		// recursion
+		// terminating case
+		if (end.equals(currentPath.getLastVertex())) {
+			possiblePaths.add(currentPath);
+		} else { // recursive case
+			for (IEdge edge : getAdjacentEdges(currentPath.getLastVertex())) { // this will kill the path if no where to go
+				if (!currentPath.getVertices().contains(edge.getVertex2())) {
+					// passing by object reference and by value reference...study
+					// don't mess with currentPath because that would mess it up for everyone else
+					// make a copy and mess with it.
+					Path newPath = new Path(currentPath);
+					newPath.getVertices().add(edge.getVertex2());
+					newPath.setWeight(newPath.getWeight() + edge.getWeight());
+					getAllPaths(end, newPath, possiblePaths);
+				}
+			}
+		}
+
+	}
+
+	@Override
+	public List<IVertex> getShortestPath(IVertex start, IVertex end) {
+
+		PriorityQueue<Path> possiblePaths = new PriorityQueue<>();
+
+		if (start == end) {
+			return Arrays.asList(start);
+		}
+
+		for (IEdge edge : getAdjacentEdges(start)) {
+			Path currentPath = new Path(Arrays.asList(start, edge.getVertex2()), edge.getWeight());
+			getAllPaths(end, currentPath, possiblePaths);
+		}
+//		System.out.println("All paths");
+//		possiblePaths.forEach(x -> System.out.println(x.getVertices() + ": " + x.getWeight()));
+//		System.out.println("---------------");		
+		return possiblePaths
+				.stream()
+				.findFirst()
+				.orElse(new Path())
+				.getVertices();
+	}
