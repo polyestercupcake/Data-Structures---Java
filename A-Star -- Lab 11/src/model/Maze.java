@@ -16,10 +16,12 @@ public class Maze extends AbstractMaze {
 		super(booleanMaze); // calls parent constructor (AbstractMaze)
 		if (booleanMaze == null)
 			return;
-		maxRowSize = booleanMaze[0].length;
-		maxColumnSize = booleanMaze.length;
-		maze = new Cell[maxRowSize][maxColumnSize];
-		createArrayOfCells(booleanMaze);
+		else {
+			maxRowSize = booleanMaze.length; // 20
+			maxColumnSize = booleanMaze[0].length; // 25
+			maze = new Cell[maxRowSize][maxColumnSize];
+			createArrayOfCells(booleanMaze);
+		}
 	}
 
 	public Cell[][] getMaze() {
@@ -27,8 +29,8 @@ public class Maze extends AbstractMaze {
 	}
 
 	public void createArrayOfCells(boolean[][] booleanMaze) {
-		for (int row = 0; row < booleanMaze[0].length; row++) {
-			for (int column = 0; column < booleanMaze.length; column++) {
+		for (int row = 0; row < booleanMaze.length; row++) {
+			for (int column = 0; column < booleanMaze[0].length; column++) {
 				if (booleanMaze[row][column] == true) {
 					maze[row][column] = new Cell(row, maxRowSize, column, maxColumnSize, true);
 				} else {
@@ -75,7 +77,7 @@ public class Maze extends AbstractMaze {
 						Path newPath = new Path();
 						newPath.getCells().addAll(currentPath.getCells());
 						newPath.getCells().add(cell);
-						//possiblePaths.add(newPath);
+						// possiblePaths.add(newPath);
 						getAllPaths(newPath, possiblePaths);
 					}
 				}
@@ -89,17 +91,19 @@ public class Maze extends AbstractMaze {
 		PriorityQueue<Path> possiblePaths = new PriorityQueue<>();
 		List<Cell> cellsVisited = new ArrayList<>();
 		// List<Cell> notVisited = new ArrayList<>();
-
-		//for (Cell cell : getAdjacentCells(maze[0][0])) {
-			Path path = new Path();
-			// add first value at 0,0
-			path.getCells().add(maze[0][0]);
-				//cellsVisited.add(maze[0][0]);
-			//path.getCells().add(cell);
-				//cellsVisited.add(cell);
-			//possiblePaths.add(path);
-			getAllPaths(path, possiblePaths);
-		//}
+		if (maze == null) {
+			return null;
+		}
+		// for (Cell cell : getAdjacentCells(maze[0][0])) {
+		Path path = new Path();
+		// add first value at 0,0
+		path.getCells().add(maze[0][0]);
+		// cellsVisited.add(maze[0][0]);
+		// path.getCells().add(cell);
+		// cellsVisited.add(cell);
+		// possiblePaths.add(path);
+		getAllPaths(path, possiblePaths);
+		// }
 
 		// get it's cells to the right and below if neither is false
 		// (sometimes will have to check cell to currentCell's left)
@@ -144,12 +148,17 @@ public class Maze extends AbstractMaze {
 		// x's where there are blocks
 		// [] for bounds
 		StringBuilder s = new StringBuilder();
-
+		if (maze == null) {
+			return null;
+		}
 		for (int x = 0; x < maze.length; x++) {
-			s.append("[");
+			s.append("[ ");
 			for (int y = 0; y < maze[0].length; y++) {
-				// if (maze[x][y] == false) s.append("x"); else
-				s.append("  " + maze[x][y] + "  ");
+				if (maze[x][y].isTraverseable() == false)
+					s.append(" X ");
+				else
+					s.append(" O ");
+				// s.append(" " + maze[x][y] + " "); // for cellID
 			}
 			s.append(" ]");
 			s.append("\n");
