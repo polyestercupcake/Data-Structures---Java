@@ -1,0 +1,37 @@
+A* notes: always start at top left and end at bottom right
+
+similar to breadth first and getShortestPath
+
+very bad on efficiency
+use 2D array OR give each cell a number
+
+We are finding the shortest path from a starting point to an ending point
+
+some cells are going to be walls where we can't go...we have to go around it
+
+it'll never be quicker to go back where you were
+
+return null or "no path exists" if there are walls all around it
+
+cannot go diagonal
+
+ALGORITHM:
+
+cells considered (think visited/unvisited) -> once I go to cell 0, I never want to go there again
+PriorityQueue(pathsToConsider)...PQ will be based on F cost
+F = G + H cost
+G is how far you've actually gone, how many steps I've taken
+0 -> 1 is going 1 step
+H cost is the minimum (least) number of steps I would have to take to get to my goal
+F cost is the total expected cost of steps
+
+F (total steps) cost = G (steps taken) cost + H (minimum steps needed) cost
+
+The path with the lowest F cost will bubble to the top of the queue (override the compareTo())
+
+find all places 0 can go (all adjacent cells)
+once you find them all, remove 0 from the queue ---- same with any vertex you get, no matter the path size
+
+as soon as you find one that contains your ending value, kill it and return that path if it's == to the F cost. You can guarantee it's the shortest
+because it's sorted. If there is no path with the starting F cost, get the path with the smallest F cost
+NEVER over-estimate H cost...it can be wrong and it will stil wrong as long as you don't over-estimate
