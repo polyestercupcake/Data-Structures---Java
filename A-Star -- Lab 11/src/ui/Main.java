@@ -55,11 +55,14 @@ public class Main {
 					};
 		
 		
-		Maze m = new Maze(maze1);
+		Maze m = new Maze(maze2);
+		
+		System.out.println("A* Path: \n" + m.getAStarPath());
+		System.out.println();
+		System.out.println(m.toString());
+		
 		//System.out.println(m.toString());
 		//System.out.println(m.getMaze()[3][22]); // works...I'm keeping it r x c
-		System.out.println(m.getAStarPath());
-		System.out.println(m.toString());
 		//System.out.println(m.getIDs());
 		//System.out.println(m.getCoordinates());
 	}

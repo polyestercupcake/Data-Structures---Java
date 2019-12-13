@@ -60,32 +60,6 @@ public class Maze extends AbstractMaze {
 		return "";
 	}
 
-	public void getAllPaths(Path currentPath, PriorityQueue<Path> possiblePaths) {
-		// recursion
-		// terminating case
-		if (maze[maxRowSize - 1][maxColumnSize - 1].equals(currentPath.getLastCell())) {
-			possiblePaths.add(currentPath);
-		} else { // recursive case
-			for (Cell cell : getAdjacentCells(currentPath.getLastCell())) { // this will kill the path if no where to go
-				if (!currentPath.getIDs().contains(cell.getID())) {
-					// passing by object reference and by value reference...study
-					// don't mess with currentPath because that would mess it up for everyone else
-					// make a copy and mess with it.
-
-					// evaluate new h cost (figure out how to calculate)
-					// add each new path to possiblePaths
-					if (currentPath.getLastCell().getHCost() > cell.getHCost()) {
-						Path newPath = new Path();
-						newPath.getCells().addAll(currentPath.getCells());
-						newPath.getCells().add(cell);
-						// possiblePaths.add(newPath);
-						getAllPaths(newPath, possiblePaths);
-					}
-				}
-			}
-		}
-	}
-
 	@Override
 	public List<Integer> getAStarPath() {
 
@@ -109,7 +83,6 @@ public class Maze extends AbstractMaze {
 			currentPath = possiblePaths.poll();
 			for (Cell cell : getAdjacentCells(currentPath.getLastCell())) {
 				if (!cellsVisited.contains(cell)) {
-//					if (currentPath.getLastCell().getHCost() > cell.getHCost()
 					if (cell.isTraverseable()) {
 						newPath = new Path();
 						newPath.getCells().addAll(currentPath.getCells());
@@ -119,7 +92,7 @@ public class Maze extends AbstractMaze {
 					}
 				}
 			}
-		System.out.println(currentPath.getfCost( ) + " = " + currentPath.getgCost() + " + " + currentPath.gethCost());
+//		System.out.println(currentPath.getfCost( ) + " = " + currentPath.getgCost() + " + " + currentPath.gethCost());
 			if (currentPath.getLastCell().getID() == maze[maxRowSize-1][maxColumnSize-1].getID()) {
 //				System.out.println(currentPath.getIDs());
 //				System.out.println(currentPath.getIDs().size());
@@ -127,13 +100,6 @@ public class Maze extends AbstractMaze {
 				return currentPath.getIDs();
 			}
 		}
-
-//			System.out.println("All paths: " + possiblePaths.size());
-//			possiblePaths.forEach(x -> System.out.println(x.getIDs()));
-//			System.out.println("---------------");
-			
-//		 return possiblePaths // auto hits compareTo when a new path is added
-//		 .stream().findFirst().orElse(new Path()).getIDs();
 		return new ArrayList<>();
 	}
 
@@ -171,10 +137,7 @@ public class Maze extends AbstractMaze {
 
 	@Override
 	public String toString() {
-		// spaces where it's open
-		// *'s where the path goes
-		// x's where there are blocks
-		// [] for bounds
+		
 		StringBuilder s = new StringBuilder();
 		if (maze == null) {
 			return null;
@@ -197,12 +160,5 @@ public class Maze extends AbstractMaze {
 
 		return s.toString();
 	}
-
-	/*
-	 * int counter = 0; // start cell on 0 // in my list ArrayList...add to the
-	 * arrayList a number that will correspond to // each boolean value in the maze
-	 * for (int m = 0; m < maze.length; m++) { for (int x = 0; x < maze.length; x++)
-	 * { list.add(counter++); } } System.out.println("List of values: " + list);
-	 */
 
 }
