@@ -20,9 +20,9 @@ public class Path implements Comparable<Path> {
 		return null;
 	}
 
-	public void setCells(List<Cell> cells) {
-		this.cells = cells;
-	}
+//	public void setCells(List<Cell> cells) {
+//		this.cells = cells;
+//	}
 
 	public int gethCost() {
 		return getLastCell().getHCost();

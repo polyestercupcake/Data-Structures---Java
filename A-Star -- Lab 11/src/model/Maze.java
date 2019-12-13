@@ -9,6 +9,7 @@ public class Maze extends AbstractMaze {
 	private Cell[][] maze;
 	private int maxRowSize = 0;
 	private int maxColumnSize = 0;
+	List<Integer> pathToReturn = new ArrayList<>();
 
 	// constructor : pretty much is an early-on setter...gotta have your clothes on
 	// before you go outside
@@ -90,6 +91,7 @@ public class Maze extends AbstractMaze {
 
 		PriorityQueue<Path> possiblePaths = new PriorityQueue<>();
 		List<Cell> cellsVisited = new ArrayList<>();
+<<<<<<< refs/remotes/origin/master
 		// List<Cell> notVisited = new ArrayList<>();
 		if (maze == null) {
 			return null;
@@ -115,10 +117,52 @@ public class Maze extends AbstractMaze {
 		// that path if it's == to the F cost and has the smallest h cost
 
 //			System.out.println("All paths");
+=======
+		Path currentPath = new Path();
+		Path newPath = new Path();
+		if (maze == null) {
+			return null;
+		}
+		if (maze.length == 1) {
+			currentPath.getCells().add(maze[0][0]);
+			return currentPath.getIDs();
+		}
+
+		cellsVisited.add(maze[0][0]);
+		currentPath.getCells().add(maze[0][0]);
+		possiblePaths.add(currentPath);
+		
+		while (possiblePaths.size() > 0) {
+			currentPath = possiblePaths.poll();
+			for (Cell cell : getAdjacentCells(currentPath.getLastCell())) {
+				if (!cellsVisited.contains(cell)) {
+//					if (currentPath.getLastCell().getHCost() > cell.getHCost()
+					if (cell.isTraverseable()) {
+						newPath = new Path();
+						newPath.getCells().addAll(currentPath.getCells());
+						newPath.getCells().add(cell);
+						cellsVisited.add(cell);
+						possiblePaths.add(newPath);
+					}
+				}
+			}
+		System.out.println(currentPath.getfCost( ) + " = " + currentPath.getgCost() + " + " + currentPath.gethCost());
+			if (currentPath.getLastCell().getID() == maze[maxRowSize-1][maxColumnSize-1].getID()) {
+//				System.out.println(currentPath.getIDs());
+//				System.out.println(currentPath.getIDs().size());
+				pathToReturn = currentPath.getIDs();
+				return currentPath.getIDs();
+			}
+		}
+
+//			System.out.println("All paths: " + possiblePaths.size());
+>>>>>>> A* Finished
 //			possiblePaths.forEach(x -> System.out.println(x.getIDs()));
 //			System.out.println("---------------");
-		return possiblePaths // auto hits compareTo when a new path is added
-				.stream().findFirst().orElse(new Path()).getIDs();
+			
+//		 return possiblePaths // auto hits compareTo when a new path is added
+//		 .stream().findFirst().orElse(new Path()).getIDs();
+		return new ArrayList<>();
 	}
 
 	public List<Cell> getAdjacentCells(Cell currentCell) {
@@ -135,6 +179,18 @@ public class Maze extends AbstractMaze {
 				Cell bottomOfCurrent = maze[currentCell.getRow() + 1][currentCell.getColumn()];
 				if (bottomOfCurrent.isTraverseable()) {
 					TraversableCells.add(bottomOfCurrent);
+				}
+			}
+			if (currentCell != maze[currentCell.getRow()][0]) {
+				Cell leftOfCurrent = maze[currentCell.getRow()][currentCell.getColumn() - 1];
+				if (leftOfCurrent.isTraverseable()) {
+					TraversableCells.add(leftOfCurrent);
+				}
+			}
+			if (currentCell != maze[0][currentCell.getColumn()]) {
+				Cell topOfCurrent = maze[currentCell.getRow() - 1][currentCell.getColumn()];
+				if (topOfCurrent.isTraverseable()) {
+					TraversableCells.add(topOfCurrent);
 				}
 			}
 		}
@@ -154,10 +210,20 @@ public class Maze extends AbstractMaze {
 		for (int x = 0; x < maze.length; x++) {
 			s.append("[ ");
 			for (int y = 0; y < maze[0].length; y++) {
+<<<<<<< refs/remotes/origin/master
 				if (maze[x][y].isTraverseable() == false)
 					s.append(" X ");
 				else
 					s.append(" O ");
+=======
+				
+				if (pathToReturn.contains(maze[x][y].getID()))
+					s.append(" * ");
+				else if (maze[x][y].isTraverseable() == false)
+					s.append(" X ");
+				else
+					s.append("   ");
+>>>>>>> A* Finished
 				// s.append(" " + maze[x][y] + " "); // for cellID
 			}
 			s.append(" ]");

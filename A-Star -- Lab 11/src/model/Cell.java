@@ -22,11 +22,11 @@ public class Cell {
 
 	public int getHCost() {
 		// difference between x and max x + difference between y and max y
-		return (maxRowSize - row - 1) + (maxColumnSize - column - 1);
+		return (row - (maxRowSize-1)) + (column - (maxColumnSize-1));
 	}
 
 	public int getID() {
-		return (maxRowSize * row) + column;
+		return (maxColumnSize * row) + column;
 	}
 
 	public int getRow() {

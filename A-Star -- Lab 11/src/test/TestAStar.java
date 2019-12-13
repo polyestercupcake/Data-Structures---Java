@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -22,7 +23,6 @@ class TestAStar {
 	 * @author cberkstresser
 	 */
 	@Test
-	@Disabled // take off when ready to test
 	void testMegaMaze() {
 		/*
 		 * This takes just over 3 minutes on my machine...
@@ -37,7 +37,6 @@ class TestAStar {
 	 * @author cberkstresser
 	 */
 	@Test
-	@Disabled
 	void testMidMaze() {
 		/*
 		 * This takes just over 30 seconds on my machine...
@@ -189,4 +188,31 @@ class TestAStar {
 		}
 		return maze;
 	}
+	
+    /**
+     * Writes an image to disk.
+     * 
+     * @param aStarPath     The aStarPath to plot on the image
+     * @param inputFileMaze The path/file of the input image on which we found a
+     *                      path.
+     * @param outputFile    A new file taking the input image and adding the path.
+     */
+    private static void writeImage(List<Integer> aStarPath, String inputFileMaze, String outputFile) {
+        BufferedImage input;
+        try {
+            input = ImageIO.read(new File(inputFileMaze));
+            for (int row = 0; row < input.getHeight(); ++row) {
+                for (int column = 0; column < input.getWidth(); ++column) {
+                    if (aStarPath.contains(row * input.getWidth() + column)) {
+                        // draw path in red.
+                        input.setRGB(column, row, Color.RED.getRGB());
+                    }
+                }
+            }
+            ImageIO.write(input, "gif", new File(outputFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
